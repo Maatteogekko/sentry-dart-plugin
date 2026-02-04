@@ -112,8 +112,10 @@ class SentryDartPlugin {
     if (_configuration.symbolsFolder.isNotEmpty) {
       final symbolsRootDir = fs.directory(_configuration.symbolsFolder);
       if (await symbolsRootDir.exists()) {
-        await for (final entry in symbolsRootDir.find(symbolFileRegexp)) {
-          result.add(entry.path);
+        await for (final entry in symbolsRootDir.list(recursive: true)) {
+          if (symbolFileRegexp.hasMatch(entry.path)) {
+            result.add(entry.path);
+          }
         }
       }
     }
@@ -123,8 +125,10 @@ class SentryDartPlugin {
     if (_configuration.buildFilesFolder != _configuration.symbolsFolder) {
       final symbolsRootDir = fs.directory(_configuration.buildFilesFolder);
       if (await symbolsRootDir.exists()) {
-        await for (final entry in symbolsRootDir.find(symbolFileRegexp)) {
-          result.add(entry.path);
+         await for (final entry in symbolsRootDir.list(recursive: true)) {
+          if (symbolFileRegexp.hasMatch(entry.path)) {
+            result.add(entry.path);
+          }
         }
       }
     }
